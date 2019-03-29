@@ -1,0 +1,51 @@
+O Redux funciona basicamente como o Context API utilizado no projeto contact_manager_react, sendo que a ideia do Redux é administrar vários reducers, imaginando uma grande aplicação tendo que prover informações diferentes para vários componentes, como por exemplo em uma rede social, onde você tem os usuários, os posts de cada usuário, grupos onde esses usuários pode estar inseridos e demais informações que venham de diferentes lugares e precisam ser administradas separadamente, porém providas para todos os componentes.
+
+A configuração do Redux depende:
+
+  - da construção do store.js, que é aqui quem vai disponibilizar tudo que precisa ser importado para ser provido através da propriedade store do provider, por exemplo. São importados o método createStore, applyMiddleware e compose do redux, thunk do redux-thunk e definido o arquivo principal onde serão criados os reducers (arquivo index dentro de uma pasta chamada reducers, por exemplo);
+    -> Modelo de setup da store.js:
+        import { createStore, applyMiddleware, compose } from 'redux';
+        import thunk from 'redux-thunk';
+        import rootReducer from './reducers';
+
+        const initialState = {},
+          middleware = [thunk],
+          store = createStore(
+            rootReducer,
+            initialState,
+            compose(
+              applyMiddleware(...middleware),
+              window.__REDUX_DEVTOOLS_EXTENSION__&&window.__REDUX_DEVTOOLS_EXTENSION__()
+              )
+          );
+
+        export default store;
+    Tendo tudo isso definido a store pode ser importada no arquivo principal da aplicação (aqui no caso é o App.js), justamente para ser usado como propriedade do Provider que é importado também a partir do do redux;
+  - da criação da pasta reducers com o arquivo index.js (que nessa configuração é o arquivo que será o "router" dos reducers que serão criados). Nele será importado o combineReducers do redux e cada reducer que será criado para a aplicação (contactReducer, postReducer, userReducer, etc). A ideia é exportar como default a função combineReducers, como um objeto, onde cada propriedade do objeto é um reducer que será importado.
+  
+    -> A título de exemplo segue abaixo uma estrutura onde os exemplos mencionados estariam sendo usados:
+      import { combineReducers } from 'redux';
+      import contactReducer from './contactReducer';
+      import postReducer from './postReducer';
+      import userReducer from './userReducer';
+
+      export default combineReducers ({
+        contact: contactReducer,
+        post: postReducer,
+        user: userReducer
+      });
+  - Cada reducer criado terá seu initialState e exportará por padrão (export default) uma função anônima que recebe como parâmetro o state um action (que é um objeto nomalmente com um type que é uma string e um payload que será um objeto carregando toda a informação que será necessária para o reducer). Essa função retornará um objeto baseado no action.type, devolvendo por padrão o state que é passado como parâmetro.
+    -> Exemplo de como essa estrutura poderia ser montada, considerando essa configuração que está sendo usada:
+      const initialState = {}
+
+      export default function(state = initialState, action) {
+        switch(action.type) {
+          case 'ADD_CONTACT':
+            return {
+              ...state,
+              contacts: 'Exemplo'
+            }
+          default:
+            return state;
+        }
+      }
