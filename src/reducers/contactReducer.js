@@ -1,4 +1,4 @@
-import { GET_CONTACTS, ADD_CONTACT, DELETE_CONTACT } from '../actions/types';
+import { GET_CONTACT,GET_CONTACTS, ADD_CONTACT, DELETE_CONTACT } from '../actions/types';
 
 const initialState = {
   contacts: [
@@ -20,11 +20,17 @@ const initialState = {
     //   email: 'henry@gmail.com',
     //   phone: '333-333-333'
     // }
-  ]
+  ],
+  contact: {}
 }
 
 export default function(state = initialState, action) {
   switch(action.type) {
+    case GET_CONTACT:
+      return {
+        ...state,
+        contact: action.payload
+      }
     case GET_CONTACTS:
       return {
         ...state,

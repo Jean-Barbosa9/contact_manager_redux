@@ -34,7 +34,7 @@ class AddContact extends Component {
       return;
     }
 
-    this.props.addContact({id: uuid(),name,email,phone})
+    this.props.addContact({name,email,phone})
 
     // Clear State
     this.setState({
