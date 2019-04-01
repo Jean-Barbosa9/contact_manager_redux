@@ -20,16 +20,17 @@ class Contact extends Component {
     return (
       <div className="card card-body mb-3">
         <h4>
-          {name}{' '}
-          <i
+          <span
+            style={{ cursor: 'pointer' }}
             onClick={() =>
               this.setState({
                 showContactInfo: !this.state.showContactInfo
               })
             }
-            className="fas fa-sort-down"
-            style={{ cursor: 'pointer' }}
-          />
+          >
+            {name}
+            <i style={{padding: '0 10px'}} className="fas fa-sort-down" />
+          </span>
           <i
             className="fas fa-times"
             style={{ cursor: 'pointer', float: 'right', color: 'red' }}
